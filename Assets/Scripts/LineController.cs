@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +9,7 @@ public class LineController : MonoBehaviour
     [SerializeField] private float _minStepBetweenPositions = 0.5f;
     
     private Camera _camera;
+    private bool _lineDrown = false;
 
     private void Awake()
     {
@@ -18,6 +18,11 @@ public class LineController : MonoBehaviour
 
     private void Update()
     {
+        if (_lineDrown)
+        {
+            return;
+        }
+        
         if (Input.GetMouseButton(0))
         {
             DrawLine();
@@ -25,6 +30,7 @@ public class LineController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            _lineDrown = true;
             StopDrawingLine?.Invoke(_lineRenderer);
         }
     }

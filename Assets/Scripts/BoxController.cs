@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Obi;
 using UnityEngine;
 
 public class BoxController : MonoBehaviour
 {
+    public event Action WasCollision;
+    public event Action DropedDownOnFinishPoint;
+    
     [SerializeField] private GameObject _rope;
     [SerializeField] private float _speed = 1;
 
@@ -23,10 +27,16 @@ public class BoxController : MonoBehaviour
         }
     }
 
+    public void DropBoxAfterLostGame()
+    {
+        _ropeAttachment.enabled = false;
+    }
+    
     private void OnCollisionEnter()
     {
         // Отцепляем ящик от веревки
         _ropeAttachment.enabled = false;
+        WasCollision?.Invoke();
     }
     
     // Vector3 position - точка, на которую должен опуститься ящик
@@ -45,6 +55,8 @@ public class BoxController : MonoBehaviour
 
         // Медленно двигаем ящик вниз
         StartCoroutine(DeliverToTarget(position));
+        
+        DropedDownOnFinishPoint?.Invoke();
     }
 
     private IEnumerator DeliverToTarget(Vector3 targetPosition)
