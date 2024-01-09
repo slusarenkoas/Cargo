@@ -6,7 +6,7 @@ using UnityEngine;
 public class BoxController : MonoBehaviour
 {
     public event Action WasCollision;
-    public event Action DropedDownOnFinishPoint;
+    public event Action DroppedDownOnFinishPoint;
     
     [SerializeField] private GameObject _rope;
     [SerializeField] private float _speed = 1;
@@ -56,7 +56,7 @@ public class BoxController : MonoBehaviour
         // Медленно двигаем ящик вниз
         StartCoroutine(DeliverToTarget(position));
         
-        DropedDownOnFinishPoint?.Invoke();
+        DroppedDownOnFinishPoint?.Invoke();
     }
 
     private IEnumerator DeliverToTarget(Vector3 targetPosition)

@@ -3,10 +3,11 @@ using UnityEngine.Events;
 
 public class LineController : MonoBehaviour
 {
-    public UnityEvent<LineRenderer> StopDrawingLine;
+    [SerializeField] private UnityEvent<LineRenderer> StopDrawingLine;
     
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private float _minStepBetweenPositions = 0.5f;
+    [SerializeField] private float _deepCamera = 12.88f;
     
     private Camera _camera;
     private bool _lineDrown = false;
@@ -31,17 +32,16 @@ public class LineController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             _lineDrown = true;
-            StopDrawingLine?.Invoke(_lineRenderer);
+            StopDrawingLine.Invoke(_lineRenderer);
         }
     }
 
     private void DrawLine()
     {
         var previousPosition = _lineRenderer.GetPosition(_lineRenderer.positionCount - 1);
-        var mousePosition = new Vector3(Input.mousePosition.x,Input.mousePosition.y,12.88f);
+        var mousePosition = new Vector3(Input.mousePosition.x,Input.mousePosition.y,_deepCamera);
         var nextPosition = _camera.ScreenToWorldPoint(mousePosition);
         
-        //exclude extra points
         var currentDistance = Vector3.Distance(nextPosition, previousPosition);
 
         if (!(currentDistance > _minStepBetweenPositions)) return;
